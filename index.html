@@ -11,16 +11,13 @@
 <body>
   <header class="hero">
     <img src="logo.jpeg" alt="Pop Roll" class="logo" />
-    <div>
-      <h1>Pop Roll</h1>
-      <p>Красиво снаружи. Вкусно внутри.</p>
-    </div>
+    <div class="hero-copy"><h1>Pop Roll</h1><p id="slogan">Красиво снаружи. Вкусно внутри.</p></div><div class="language-switch"><button id="langRu" class="lang active">RU</button><button id="langVi" class="lang">VI</button></div>
   </header>
 
   <main>
     <section class="notice">
-      <strong>Доставка по Нячангу</strong>
-      <span>Свежие роллы, бенто-боксы, bubble tea и десерты</span>
+      <strong id="deliveryTitle">Доставка по Нячангу</strong>
+      <span id="deliveryText">Свежие роллы, нигири и bubble tea</span>
     </section>
 
     <nav class="categories" id="categories"></nav>
@@ -28,37 +25,37 @@
   </main>
 
   <button class="cart-bar" id="cartBar" hidden>
-    <span>🛒 Корзина: <b id="cartCount">0</b></span>
+    <span>🛒 <span id="cartLabel">Корзина</span>: <b id="cartCount">0</b></span>
     <strong id="cartTotal">0 ₫</strong>
   </button>
 
   <div class="modal" id="cartModal" hidden>
     <div class="modal-card">
       <div class="modal-head">
-        <h2>Ваш заказ</h2>
+        <h2 id="orderTitle">Ваш заказ</h2>
         <button id="closeCart" class="icon-btn">✕</button>
       </div>
       <div id="cartItems"></div>
 
-      <label>Имя
+      <label><span id="nameLabel">Имя</span>
         <input id="customerName" placeholder="Как к вам обращаться?" />
       </label>
-      <label>Телефон
+      <label><span id="phoneLabel">Телефон</span>
         <input id="customerPhone" placeholder="+84..." inputmode="tel" />
       </label>
-      <label>Адрес доставки
+      <label><span id="addressLabel">Адрес доставки</span>
         <textarea id="customerAddress" placeholder="Например: Oceanus OC2A, квартира..."></textarea>
       </label>
-      <label>Комментарий
+      <label><span id="paymentLabel">Оплата</span><select id="paymentMethod"><option value="cash" id="cashOption">Наличными</option><option value="transfer" id="transferOption">Переводом по QR</option></select></label><label><span id="commentLabel">Комментарий</span>
         <textarea id="customerComment" placeholder="Без васаби, позвонить по приезде..."></textarea>
       </label>
 
       <div class="checkout-total">
-        <span>Итого</span>
+        <span id="totalLabel">Итого</span>
         <strong id="checkoutTotal">0 ₫</strong>
       </div>
-      <button id="sendOrder" class="primary">Оформить заказ</button>
-      <p class="hint">На первом этапе заказ откроется сообщением в Telegram.</p>
+      <button id="sendOrder" class="primary" id="sendOrder">Оформить заказ</button>
+      <p class="hint" id="orderHint">После отправки мы подтвердим заказ и время доставки.</p>
     </div>
   </div>
 
