@@ -12,7 +12,8 @@ const MIN_ORDER = 100000;
 const orders = new Map();
 let sequence = Math.floor(Date.now() / 1000) % 100000;
 
-const BOT_DESCRIPTION = `🍣 Pop Roll — доставка роллов в Нячанге
+const BOT_DESCRIPTIONS = {
+  ru: `🍣 Pop Roll — доставка роллов в Нячанге
 
 🚀 Доставка до двери от 15 минут
 🥢 Свежие роллы, суши и бенто-боксы
@@ -20,13 +21,46 @@ const BOT_DESCRIPTION = `🍣 Pop Roll — доставка роллов в Ня
 ❤️ Готовим с любовью
 
 🎉 В честь открытия доставка бесплатно при заказе от 100 000 ₫
-🕓 Работаем ежедневно с 16:00 до 00:00`;
+🕓 Работаем ежедневно с 16:00 до 00:00`,
 
-const START_MESSAGE = `🍣 Добро пожаловать в семью Pop Roll!
+  vi: `🍣 Pop Roll — giao sushi cuộn tại Nha Trang
+
+🚀 Giao tận cửa từ 15 phút
+🥢 Sushi cuộn, sushi và bento tươi ngon
+🧋 Bubble Tea và món tráng miệng
+❤️ Được chuẩn bị bằng cả tình yêu
+
+🎉 Mừng khai trương: miễn phí giao hàng cho đơn từ 100.000 ₫
+🕓 Mở cửa hằng ngày từ 16:00 đến 00:00`
+};
+
+const START_MESSAGES = {
+  ru: `🍣 Добро пожаловать в семью Pop Roll!
 
 Вкуснейшие роллы и Bubble Tea в Нячанге
 
-Чтобы сделать заказ, нажмите кнопку ниже`;
+Чтобы сделать заказ, нажмите кнопку ниже`,
+
+  vi: `🍣 Chào mừng bạn đến với gia đình Pop Roll!
+
+Sushi cuộn và Bubble Tea thơm ngon tại Nha Trang
+
+Để đặt món, hãy nhấn nút bên dưới`
+};
+
+function userLanguage(languageCode = "") {
+  return String(languageCode).toLowerCase().startsWith("vi") ? "vi" : "ru";
+}
+
+function menuButtonText(language) {
+  return language === "vi" ? "🛍 Mở thực đơn" : "🛍 Открыть меню";
+}
+
+function fallbackMessage(language) {
+  return language === "vi"
+    ? "Để đặt món, hãy nhấn nút bên dưới"
+    : "Чтобы сделать заказ, нажмите кнопку ниже";
+}
 
 app.use(express.json({ limit: "300kb" }));
 
@@ -419,14 +453,15 @@ app.post("/telegram", async (req, res) => {
 
     const chatId = message.chat.id;
     const text = String(message.text || "");
+    const language = userLanguage(message.from?.language_code);
 
     if (text.startsWith("/start")) {
       await telegram("sendMessage", {
         chat_id: chatId,
-        text: START_MESSAGE,
+        text: START_MESSAGES[language],
         reply_markup: {
           inline_keyboard: [[{
-            text: "🛍 Открыть меню",
+            text: menuButtonText(language),
             web_app: {url: MINI_APP_URL}
           }]]
         }
@@ -436,10 +471,10 @@ app.post("/telegram", async (req, res) => {
 
     await telegram("sendMessage", {
       chat_id: chatId,
-      text: "Чтобы сделать заказ, нажмите кнопку ниже",
+      text: fallbackMessage(language),
       reply_markup: {
         inline_keyboard: [[{
-          text: "🛍 Открыть меню",
+          text: menuButtonText(language),
           web_app: {url: MINI_APP_URL}
         }]]
       }
@@ -472,14 +507,24 @@ app.listen(PORT, "0.0.0.0", async () => {
     });
 
     await telegram("setMyDescription", {
-      description: BOT_DESCRIPTION
+      description: BOT_DESCRIPTIONS.ru
+    });
+
+    await telegram("setMyDescription", {
+      description: BOT_DESCRIPTIONS.vi,
+      language_code: "vi"
     });
 
     await telegram("setMyShortDescription", {
       short_description: "Семейная доставка роллов и Bubble Tea в Нячанге"
     });
 
-    console.log("Telegram webhook, menu button and descriptions configured");
+    await telegram("setMyShortDescription", {
+      short_description: "Giao sushi cuộn và Bubble Tea gia đình tại Nha Trang",
+      language_code: "vi"
+    });
+
+    console.log("Telegram webhook, menu button and RU/VI descriptions configured");
   } catch (error) {
     console.error("Telegram setup failed:", error);
   }
