@@ -1,1 +1,82 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Pop Roll</title><link rel="stylesheet" href="style.css"><script src="https://telegram.org/js/telegram-web-app.js"></script></head><body><header><img src="logo.jpeg" class="logo"><div class="brand"><h1>Pop Roll</h1><p id="s1"></p><p id="s2"></p></div><div class="langs"><button data-lang="ru" class="active">RU</button><button data-lang="vi">VI</button></div></header><main><section class="promo"><b>GRAND OPENING</b><h2 id="promoTitle"></h2><p id="promoText"></p></section><nav id="cats"></nav><section id="products" class="grid"></section></main><button id="cartBtn" class="cart" hidden><span>🛒 <span id="cartWord"></span> <b id="cartCount">0</b></span><strong id="cartTotal"></strong></button><div id="modal" class="modal" hidden><div class="panel"><div class="paneltop"><h2 id="orderTitle"></h2><button id="close">✕</button></div><div id="cartItems"></div><label><span id="nameLabel"></span><input id="name"></label><label><span id="phoneLabel"></span><input id="phone" inputmode="tel"></label><label><span id="addressLabel"></span><textarea id="address"></textarea></label><label><span id="paymentLabel"></span><select id="payment"><option value="cash" id="cashOpt"></option><option value="qr" id="qrOpt"></option></select></label><label><span id="commentLabel"></span><textarea id="comment"></textarea></label><div class="sum"><span id="totalLabel"></span><strong id="finalTotal"></strong></div><button id="send" class="send"></button><p id="hint" class="hint"></p></div></div><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Pop Roll</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <header>
+    <img src="logo.jpeg" class="logo" alt="Pop Roll">
+    <div class="brand">
+      <h1>Pop Roll</h1>
+      <p id="s1"></p>
+      <p id="s2"></p>
+    </div>
+    <div class="langs">
+      <button data-lang="ru" class="active">RU</button>
+      <button data-lang="vi">VI</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="family-banner" aria-label="Pop Roll Family">
+      <img src="family_banner.png?v=1" alt="Семья Pop Roll">
+      <div class="family-copy">
+        <strong>POP ROLL FAMILY</strong>
+        <span>Семейная доставка в Нячанге</span>
+      </div>
+    </section>
+
+    <section class="promo">
+      <b>GRAND OPENING</b>
+      <h2 id="promoTitle"></h2>
+      <p id="promoText"></p>
+      <div class="delivery-info">
+        <span>🎉 Бесплатная доставка от 100 000 ₫</span>
+        <span>🚀 От 15 минут</span>
+        <span>🕓 16:00–00:00</span>
+      </div>
+    </section>
+
+    <nav id="cats"></nav>
+    <section id="products" class="grid"></section>
+  </main>
+
+  <button id="cartBtn" class="cart" hidden>
+    <span>🛒 <span id="cartWord"></span> <b id="cartCount">0</b></span>
+    <strong id="cartTotal"></strong>
+  </button>
+
+  <div id="modal" class="modal" hidden>
+    <div class="panel">
+      <div class="paneltop">
+        <h2 id="orderTitle"></h2>
+        <button id="close">✕</button>
+      </div>
+      <div id="cartItems"></div>
+
+      <label><span id="nameLabel"></span><input id="name" autocomplete="name"></label>
+      <label><span id="phoneLabel"></span><input id="phone" inputmode="tel" autocomplete="tel"></label>
+      <label><span id="addressLabel"></span><textarea id="address"></textarea></label>
+      <label>
+        <span id="paymentLabel"></span>
+        <select id="payment">
+          <option value="cash" id="cashOpt"></option>
+          <option value="qr" id="qrOpt"></option>
+        </select>
+      </label>
+      <label><span id="commentLabel"></span><textarea id="comment"></textarea></label>
+
+      <div class="sum"><span id="totalLabel"></span><strong id="finalTotal"></strong></div>
+      <p class="minimum-note">Минимальная сумма заказа — 100 000 ₫</p>
+      <button id="send" class="send"></button>
+      <p id="hint" class="hint"></p>
+    </div>
+  </div>
+
+  <script src="app.js?v=30"></script>
+</body>
+</html>
