@@ -1,1 +1,3 @@
-# Pop Roll launch v1\n\nРусский и вьетнамский языки. Категории: лосось, креветка, курица, краб, овощные, нигири, Bubble Tea.
+# Pop Roll Grand Opening
+
+Готовая версия для GitHub Pages.
