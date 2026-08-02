@@ -1,3 +1,2 @@
-# Pop Roll Grand Opening
-
-Готовая версия для GitHub Pages.
+# Pop Roll Final v1
+Готовая версия для GitHub Pages с фотографиями, RU/VI, скидкой 50%, корзиной и формой заказа.
