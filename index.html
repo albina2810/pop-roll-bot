@@ -25,8 +25,8 @@
     <section class="family-banner" aria-label="Pop Roll Family">
       <img src="family_banner.png?v=1" alt="Семья Pop Roll">
       <div class="family-copy">
-        <strong>POP ROLL FAMILY</strong>
-        <span>Семейная доставка в Нячанге</span>
+        <strong id="familyTitle"></strong>
+        <span id="familyText"></span>
       </div>
     </section>
 
@@ -35,9 +35,9 @@
       <h2 id="promoTitle"></h2>
       <p id="promoText"></p>
       <div class="delivery-info">
-        <span>🎉 Бесплатная доставка от 100 000 ₫</span>
-        <span>🚀 От 15 минут</span>
-        <span>🕓 16:00–00:00</span>
+        <span id="deliveryFree"></span>
+        <span id="deliveryTime"></span>
+        <span id="workingHours"></span>
       </div>
     </section>
 
@@ -71,12 +71,12 @@
       <label><span id="commentLabel"></span><textarea id="comment"></textarea></label>
 
       <div class="sum"><span id="totalLabel"></span><strong id="finalTotal"></strong></div>
-      <p class="minimum-note">Минимальная сумма заказа — 100 000 ₫</p>
+      <p id="minimumNote" class="minimum-note"></p>
       <button id="send" class="send"></button>
       <p id="hint" class="hint"></p>
     </div>
   </div>
 
-  <script src="app.js?v=30"></script>
+  <script src="app.js?v=40"></script>
 </body>
 </html>

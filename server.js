@@ -84,6 +84,20 @@ function money(value) {
   return new Intl.NumberFormat("vi-VN").format(Number(value || 0)) + " ₫";
 }
 
+function orderLanguage(order) {
+  return order?.language === "vi" ? "vi" : "ru";
+}
+
+function clientText(order, ru, vi) {
+  return orderLanguage(order) === "vi" ? vi : ru;
+}
+
+function paymentLabel(code, language) {
+  if (code === "cash") return language === "vi" ? "Tiền mặt" : "Наличными";
+  if (code === "qr") return language === "vi" ? "Chuyển khoản QR" : "Перевод по QR";
+  return language === "vi" ? "Thanh toán" : "Оплата";
+}
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -156,7 +170,22 @@ function orderLines(order) {
 }
 
 function customerConfirmation(order) {
-  return `🍣 <b>Подтвердите заказ №${order.id}</b>
+  const vi = orderLanguage(order) === "vi";
+  return vi
+    ? `🍣 <b>Xác nhận đơn hàng #${order.id}</b>
+
+${orderLines(order)}
+
+💰 <b>Tổng cộng: ${money(order.total)}</b>
+
+👤 ${escapeHtml(order.customer.name)}
+📞 ${escapeHtml(order.customer.phone)}
+📍 ${escapeHtml(order.customer.address)}
+💳 ${escapeHtml(order.payment.label)}
+${order.comment ? `💬 ${escapeHtml(order.comment)}` : ""}
+
+Thông tin trên đã chính xác chưa?`
+    : `🍣 <b>Подтвердите заказ №${order.id}</b>
 
 ${orderLines(order)}
 
@@ -190,11 +219,12 @@ ${order.comment ? `💬 ${escapeHtml(order.comment)}` : ""}
 💰 <b>Итого: ${money(order.total)}</b>`;
 }
 
-function clientKeyboard(orderId) {
+function clientKeyboard(order) {
+  const vi = orderLanguage(order) === "vi";
   return {
     inline_keyboard: [[
-      {text: "✅ Да, подтверждаю", callback_data: `client_yes:${orderId}`},
-      {text: "❌ Нет, отменить", callback_data: `client_no:${orderId}`}
+      {text: vi ? "✅ Đồng ý, xác nhận" : "✅ Да, подтверждаю", callback_data: `client_yes:${order.id}`},
+      {text: vi ? "❌ Không, hủy đơn" : "❌ Нет, отменить", callback_data: `client_no:${order.id}`}
     ]]
   };
 }
@@ -282,9 +312,10 @@ app.post("/order", async (req, res) => {
         phone: String(customer.phone).slice(0, 60),
         address: String(customer.address).slice(0, 500)
       },
+      language: req.body?.language === "vi" ? "vi" : "ru",
       payment: {
         code: String(payment.code || ""),
-        label: String(payment.label || "").slice(0, 100)
+        label: paymentLabel(String(payment.code || ""), req.body?.language === "vi" ? "vi" : "ru")
       },
       comment,
       items: items.map((item) => ({
@@ -305,7 +336,7 @@ app.post("/order", async (req, res) => {
       chat_id: order.chatId,
       text: customerConfirmation(order),
       parse_mode: "HTML",
-      reply_markup: clientKeyboard(id)
+      reply_markup: clientKeyboard(order)
     });
 
     res.json({ok: true, orderId: id, status: order.status});
@@ -333,7 +364,9 @@ app.post("/telegram", async (req, res) => {
       if (!order) {
         await telegram("sendMessage", {
           chat_id: callback.from.id,
-          text: "Заказ уже недоступен. Пожалуйста, оформите его заново."
+          text: callback.from.language_code?.startsWith("vi")
+            ? "Đơn hàng không còn khả dụng. Vui lòng đặt lại."
+            : "Заказ уже недоступен. Пожалуйста, оформите его заново."
         });
         return;
       }
@@ -349,7 +382,9 @@ app.post("/telegram", async (req, res) => {
         });
 
         await notifyClient(order,
-          `✅ <b>Заказ №${order.id} подтверждён</b>\n\nМы передали его оператору. Скоро вы получите подтверждение.`
+          clientText(order,
+            `✅ <b>Заказ №${order.id} подтверждён</b>\n\nМы передали его оператору. Скоро вы получите подтверждение.`,
+            `✅ <b>Đơn hàng #${order.id} đã được xác nhận</b>\n\nChúng tôi đã chuyển đơn cho nhân viên. Bạn sẽ sớm nhận được thông báo.`)
         );
 
         await telegram("sendMessage", {
@@ -372,7 +407,9 @@ app.post("/telegram", async (req, res) => {
         });
 
         await notifyClient(order,
-          `❌ Заказ №${order.id} отменён.\n\nНажмите «Меню», чтобы собрать новый заказ.`
+          clientText(order,
+            `❌ Заказ №${order.id} отменён.\n\nНажмите «Меню», чтобы собрать новый заказ.`,
+            `❌ Đơn hàng #${order.id} đã bị hủy.\n\nNhấn “Thực đơn” để tạo đơn hàng mới.`)
         );
         return;
       }
@@ -382,7 +419,9 @@ app.post("/telegram", async (req, res) => {
       if (action === "admin_accept") {
         order.status = "accepted";
         await notifyClient(order,
-          `🎉 <b>Заказ №${order.id} принят!</b>\n\nМы уже начинаем готовить его.\n⏱ Ориентировочное время доставки: 30–45 минут.`
+          clientText(order,
+            `🎉 <b>Заказ №${order.id} принят!</b>\n\nМы уже начинаем готовить его.\n⏱ Ориентировочное время доставки: 30–45 минут.`,
+            `🎉 <b>Đơn hàng #${order.id} đã được tiếp nhận!</b>\n\nChúng tôi đang bắt đầu chuẩn bị.\n⏱ Thời gian giao dự kiến: 30–45 phút.`)
         );
         await telegram("editMessageReplyMarkup", {
           chat_id: ADMIN_ID,
@@ -395,7 +434,9 @@ app.post("/telegram", async (req, res) => {
       if (action === "admin_cooking") {
         order.status = "cooking";
         await notifyClient(order,
-          `👨‍🍳 <b>Заказ №${order.id} готовится</b>\n\nМы сообщим, когда курьер выедет.`
+          clientText(order,
+            `👨‍🍳 <b>Заказ №${order.id} готовится</b>\n\nМы сообщим, когда курьер выедет.`,
+            `👨‍🍳 <b>Đơn hàng #${order.id} đang được chuẩn bị</b>\n\nChúng tôi sẽ thông báo khi tài xế bắt đầu giao.`)
         );
         await telegram("editMessageReplyMarkup", {
           chat_id: ADMIN_ID,
@@ -408,7 +449,9 @@ app.post("/telegram", async (req, res) => {
       if (action === "admin_courier") {
         order.status = "courier";
         await notifyClient(order,
-          `🛵 <b>Курьер уже в пути</b>\n\nЗаказ №${order.id} скоро будет у вас.`
+          clientText(order,
+            `🛵 <b>Курьер уже в пути</b>\n\nЗаказ №${order.id} скоро будет у вас.`,
+            `🛵 <b>Tài xế đang trên đường giao hàng</b>\n\nĐơn hàng #${order.id} sẽ sớm đến nơi.`)
         );
         await telegram("editMessageReplyMarkup", {
           chat_id: ADMIN_ID,
@@ -421,7 +464,9 @@ app.post("/telegram", async (req, res) => {
       if (action === "admin_delivered") {
         order.status = "delivered";
         await notifyClient(order,
-          `❤️ <b>Заказ №${order.id} доставлен</b>\n\nСпасибо, что выбрали Pop Roll! Будем рады видеть вас снова.`
+          clientText(order,
+            `❤️ <b>Заказ №${order.id} доставлен</b>\n\nСпасибо, что выбрали Pop Roll! Будем рады видеть вас снова.`,
+            `❤️ <b>Đơn hàng #${order.id} đã được giao</b>\n\nCảm ơn bạn đã chọn Pop Roll! Hẹn gặp lại bạn.`)
         );
         await telegram("editMessageReplyMarkup", {
           chat_id: ADMIN_ID,
@@ -435,7 +480,9 @@ app.post("/telegram", async (req, res) => {
       if (action === "admin_cancel") {
         order.status = "cancelled_by_admin";
         await notifyClient(order,
-          `❌ К сожалению, заказ №${order.id} отменён.\n\nМы свяжемся с вами для уточнения деталей.`
+          clientText(order,
+            `❌ К сожалению, заказ №${order.id} отменён.\n\nМы свяжемся с вами для уточнения деталей.`,
+            `❌ Rất tiếc, đơn hàng #${order.id} đã bị hủy.\n\nChúng tôi sẽ liên hệ để làm rõ thông tin.`)
         );
         await telegram("editMessageReplyMarkup", {
           chat_id: ADMIN_ID,
