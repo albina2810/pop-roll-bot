@@ -39,7 +39,8 @@ sending:"Đang gửi…",
 sent:"✅ Đơn hàng đã được gửi. Cuộc trò chuyện sẽ mở để bạn xác nhận bằng nút “Đồng ý”",
 failed:"Không thể gửi đơn hàng. Vui lòng mở thực đơn từ Telegram bot và thử lại"
 }
-}const urlLang=new URLSearchParams(location.search).get("lang");
+};
+const urlLang=new URLSearchParams(location.search).get("lang");
 const telegramLang=String(tg?.initDataUnsafe?.user?.language_code||"").toLowerCase();
 let lang=urlLang==="vi"||(!urlLang&&telegramLang.startsWith("vi"))
   ?"vi"
