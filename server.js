@@ -9,6 +9,7 @@ const KITCHEN_CHAT_ID = String(process.env.KITCHEN_CHAT_ID || "");
 const COURIER_CHAT_ID = String(process.env.COURIER_CHAT_ID || "");
 const PUBLIC_URL = "https://pop-roll-bot-production.up.railway.app";
 const MINI_APP_URL = "https://albina2810.github.io/pop-roll-bot/";
+const COMMUNITY_URL = "https://t.me/poprollfamily";
 const MIN_ORDER = 100000;
 
 const orders = new Map();
@@ -191,6 +192,30 @@ async function notifyClient(order, text) {
   if (!order.chatId) return;
   await telegram("sendMessage", { chat_id: order.chatId, text, parse_mode: "HTML" });
 }
+
+async function sendCommunityInvite(order, stage = "accepted") {
+  if (!order.chatId) return;
+  const vi = orderLanguage(order) === "vi";
+  const text = stage === "delivered"
+    ? (vi
+      ? "⭐ <b>Bạn thấy món ăn thế nào?</b>\n\nTham gia cộng đồng Pop Roll để để lại đánh giá, xem món mới, ưu đãi và quà tặng 💗"
+      : "⭐ <b>Как вам заказ?</b>\n\nПрисоединяйтесь к сообществу Pop Roll, чтобы оставить отзыв и не пропустить новинки, акции и подарки 💗")
+    : (vi
+      ? "💗 Tham gia cộng đồng Pop Roll để xem món mới, ưu đãi, quà tặng và đánh giá của khách hàng."
+      : "💗 Присоединяйтесь к сообществу Pop Roll — там новинки, акции, подарки и отзывы клиентов.");
+
+  await telegram("sendMessage", {
+    chat_id: order.chatId,
+    text,
+    parse_mode: "HTML",
+    reply_markup: {
+      inline_keyboard: [[{
+        text: vi ? "💗 Tham gia cộng đồng Pop Roll" : "💗 Вступить в сообщество Pop Roll",
+        url: COMMUNITY_URL
+      }]]
+    }
+  });
+}
 async function editKeyboard(chatId, messageId, replyMarkup) {
   if (!chatId || !messageId) return;
   await telegram("editMessageReplyMarkup", { chat_id: chatId, message_id: messageId, reply_markup: replyMarkup });
@@ -283,6 +308,7 @@ app.post("/telegram", async (req, res) => {
           order.status = "accepted";
           await editKeyboard(ADMIN_ID, callback.message.message_id, adminKeyboard(id, "accepted"));
           await notifyClient(order, clientText(order, `🎉 <b>Заказ №${order.id} принят!</b>\n\n⏱ Ориентировочное время доставки: 30–45 минут.`, `🎉 <b>Đơn hàng #${order.id} đã được tiếp nhận!</b>\n\n⏱ Thời gian giao dự kiến: 30–45 phút.`));
+          await sendCommunityInvite(order, "accepted");
           if (KITCHEN_CHAT_ID) {
             const r = await telegram("sendMessage", { chat_id: KITCHEN_CHAT_ID, text: kitchenOrder(order), parse_mode: "HTML", reply_markup: kitchenKeyboard(id, "new") });
             order.kitchenMessageId = r.result.message_id;
@@ -359,6 +385,7 @@ app.post("/telegram", async (req, res) => {
           order.status = "delivered";
           await editKeyboard(COURIER_CHAT_ID, callback.message.message_id, { inline_keyboard: [] });
           await notifyClient(order, clientText(order, `❤️ <b>Заказ №${order.id} доставлен</b>\n\nСпасибо, что выбрали Pop Roll!`, `❤️ <b>Đơn hàng #${order.id} đã được giao</b>\n\nCảm ơn bạn đã chọn Pop Roll!`));
+          await sendCommunityInvite(order, "delivered");
           await telegram("sendMessage", { chat_id: ADMIN_ID, text: `✅ Заказ №${order.id} доставлен` });
           setTimeout(() => orders.delete(id), 60 * 60 * 1000);
           return;
