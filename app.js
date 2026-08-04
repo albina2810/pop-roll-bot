@@ -5,154 +5,220 @@ if (tg) {
 }
 
 const products = [
-  {id:1, category:"Популярное", name:"Филадельфия", desc:"Лосось, сливочный сыр, огурец", price:89000, emoji:"🍣"},
-  {id:2, category:"Популярное", name:"Spicy Филадельфия", desc:"Лосось, сыр, огурец, соус шрирача", price:95000, emoji:"🔥"},
-  {id:3, category:"Роллы", name:"Калифорния с крабом", desc:"Краб, огурец, сливочный сыр, тобико", price:79000, emoji:"🦀"},
-  {id:4, category:"Роллы", name:"Лава", desc:"Нежный ролл под фирменным соусом", price:85000, emoji:"🌋"},
-  {id:5, category:"Бенто", name:"Бенто-бокс с лососем", desc:"Роллы, закуска и десерт в красивой упаковке", price:159000, emoji:"🍱"},
-  {id:6, category:"Напитки", name:"Bubble Tea", desc:"Молочный чай с тапиокой", price:49000, emoji:"🧋"},
-  {id:7, category:"Десерты", name:"Моти", desc:"Нежный японский десерт", price:39000, emoji:"🍡"}
+  {id:1,cat:"salmon",img:"philadelphia_classic.jpg",ru:"Philadelphia Classic",vi:"Philadelphia Classic",dru:"Лосось, сливочный сыр, огурец",dvi:"Cá hồi, phô mai kem, dưa leo",old:140000,price:70000,qty:"8 шт · 200 г",tag:"TOP"},
+  {id:2,cat:"salmon",img:"philadelphia_avocado.jpg",ru:"Philadelphia Avocado",vi:"Philadelphia Avocado",dru:"Лосось, сливочный сыр, авокадо",dvi:"Cá hồi, phô mai kem, bơ",old:140000,price:70000,qty:"8 шт · 200 г"},
+  {id:3,cat:"salmon",img:"philadelphia_fire.jpg",ru:"Philadelphia Fire",vi:"Philadelphia Fire",dru:"Опалённый лосось, сливочный сыр, огурец, spicy соус",dvi:"Cá hồi khò, phô mai kem, dưa leo, sốt spicy",old:140000,price:70000,qty:"8 шт · 200 г",tag:"SPICY"},
+  {id:4,cat:"salmon",img:"lava_salmon.jpg",ru:"Lava Salmon",vi:"Lava Salmon",dru:"Лосось, сыр, огурец, соус Lava с тобико и крабом",dvi:"Cá hồi, phô mai, dưa leo, sốt Lava với tobiko và cua",old:120000,price:60000,qty:"8 шт · 200 г"},
+  {id:5,cat:"salmon",img:"bonito.jpg",ru:"Bonito Roll",vi:"Bonito Roll",dru:"Лосось, сыр, огурец, стружка тунца, терияки",dvi:"Cá hồi, phô mai, dưa leo, cá bào, teriyaki",old:110000,price:55000,qty:"8 шт · 200 г"},
+  {id:6,cat:"shrimp",img:"california_shrimp.jpg",ru:"California Shrimp",vi:"California Tôm",dru:"Креветка, сыр, огурец, тобико",dvi:"Tôm, phô mai, dưa leo, tobiko",old:120000,price:60000,qty:"8 шт · 200 г"},
+  {id:7,cat:"crab",img:"california_crab.jpg",ru:"California Crab",vi:"California Cua",dru:"Краб, сыр, огурец, тобико",dvi:"Cua, phô mai, dưa leo, tobiko",old:100000,price:50000,qty:"8 шт · 200 г"},
+  {id:8,cat:"crab",img:"lava_crab.jpg",ru:"Lava Crab",vi:"Lava Crab",dru:"Краб, сыр, огурец, соус Lava",dvi:"Cua, phô mai, dưa leo, sốt Lava",old:100000,price:50000,qty:"8 шт · 200 г"},
+  {id:9,cat:"chicken",img:"caesar.jpg",ru:"Caesar Chicken Roll",vi:"Caesar Chicken Roll",dru:"Курица, сыр, салат, томат, соус Цезарь, кунжут",dvi:"Gà, phô mai, xà lách, cà chua, sốt Caesar, mè",old:80000,price:40000,qty:"8 шт · 200 г"},
+  {id:10,cat:"chicken",img:"chicken.jpg",ru:"Teriyaki Chicken Roll",vi:"Teriyaki Chicken Roll",dru:"Курица, сыр, огурец, кунжут, терияки",dvi:"Gà, phô mai, dưa leo, mè, teriyaki",old:80000,price:40000,qty:"8 шт · 200 г"},
+  {id:11,cat:"maki",img:"sake_maki.jpg",ru:"Sake Maki",vi:"Sake Maki",dru:"Лосось, рис",dvi:"Cá hồi, cơm",old:30000,price:15000,qty:"6 шт"},
+  {id:12,cat:"maki",img:"ebi_maki.jpg",ru:"Ebi Maki",vi:"Ebi Maki",dru:"Креветка, рис",dvi:"Tôm, cơm",old:30000,price:15000,qty:"6 шт"},
+  {id:13,cat:"maki",img:"kani_maki.jpg",ru:"Kani Maki",vi:"Kani Maki",dru:"Краб, рис",dvi:"Cua, cơm",old:30000,price:15000,qty:"6 шт"},
+  {id:14,cat:"maki",img:"kappa_maki.jpg",ru:"Kappa Maki",vi:"Kappa Maki",dru:"Огурец, рис",dvi:"Dưa leo, cơm",old:20000,price:10000,qty:"6 шт"},
+  {id:15,cat:"maki",img:"avocado_maki.jpg",ru:"Avocado Maki",vi:"Avocado Maki",dru:"Авокадо, рис",dvi:"Bơ, cơm",old:20000,price:10000,qty:"6 шт"},
+  {id:16,cat:"nigiri",img:"nigiri_raw.jpg",ru:"Sake Nigiri",vi:"Nigiri Cá Hồi",dru:"Рис, свежий лосось",dvi:"Cơm, cá hồi tươi",old:90000,price:45000,qty:"2 шт"},
+  {id:17,cat:"nigiri",img:"nigiri_aburi.jpg",ru:"Aburi Spicy Nigiri",vi:"Nigiri Cá Hồi Áp Chảo",dru:"Рис, опалённый лосось, spicy соус",dvi:"Cơm, cá hồi khò, sốt spicy",old:90000,price:45000,qty:"2 шт"},
+  {id:18,cat:"bubble",img:"tea_peach_passion.jpg",ru:"Peach Passion",vi:"Đào Chanh Dây",dru:"Жасминовый чай, маракуйя, персиковые boba, персиковое желе",dvi:"Trà hoa nhài, chanh dây, boba đào, thạch đào",old:40000,price:20000,qty:"500 мл"},
+  {id:19,cat:"bubble",img:"tea_peach_strawberry.jpg",ru:"Peach Strawberry",vi:"Đào Dâu",dru:"Жасминовый чай, клубника, персиковые и клубничные boba",dvi:"Trà hoa nhài, dâu, boba đào và dâu",old:40000,price:20000,qty:"500 мл"},
+  {id:20,cat:"bubble",img:"tea_peach.jpg",ru:"Classic Peach",vi:"Đào Cổ Điển",dru:"Чёрный чай, персик, персиковые boba, персиковое желе",dvi:"Trà đen, đào, boba đào, thạch đào",old:40000,price:20000,qty:"500 мл"},
+  {id:21,cat:"bubble",img:"tea_lychee_strawberry.jpg",ru:"Lychee Strawberry",vi:"Vải Dâu",dru:"Зелёный чай, личи, клубничные boba",dvi:"Trà xanh, vải, boba dâu",old:40000,price:20000,qty:"500 мл"},
+  {id:22,cat:"bubble",img:"tea_strawberry.jpg",ru:"Strawberry Boom",vi:"Dâu Boom",dru:"Зелёный чай, клубника, клубничные boba",dvi:"Trà xanh, dâu, boba dâu",old:40000,price:20000,qty:"500 мл"}
 ];
 
-const categories = ["Все", ...new Set(products.map(p => p.category))];
-let activeCategory = "Все";
-const cart = new Map();
+const tx = {
+  ru:{
+    s1:"Настолько красиво, что сначала хочется сфотографировать",
+    s2:"Настолько вкусно, что хочется возвращаться снова и снова",
+    familyTitle:"POP ROLL FAMILY",familyText:"Семейная доставка в Нячанге",
+    promoTitle:"Скидка 50% на первый заказ",promoText:"В честь открытия Pop Roll · доставка по Нячангу",
+    deliveryFree:"🎉 Бесплатная доставка от 100 000 ₫",deliveryTime:"🚀 Доставка от 15 минут",workingHours:"🕓 16:00–00:00",
+    all:"Все",salmon:"Лосось",shrimp:"Креветка",crab:"Краб",chicken:"Курица",maki:"Маки",nigiri:"Нигири",bubble:"Bubble Tea",
+    cart:"Корзина",order:"Ваш заказ",name:"Имя",phone:"Телефон",address:"Адрес доставки",payment:"Оплата",
+    cash:"Наличными",qr:"Перевод по QR",comment:"Комментарий",total:"Итого",send:"Оформить заказ",
+    hint:"После отправки мы проверим заказ и свяжемся с вами",
+    required:"Заполните имя, телефон и адрес",empty:"Добавьте товары в корзину",
+    minimum:"Минимальная сумма заказа — 100 000 ₫",minimumNote:"Минимальная сумма заказа — 100 000 ₫",
+    sending:"Отправляем…",
+    sentTelegram:"✅ Заказ отправлен. Откройте Telegram и подтвердите его кнопкой «Да»",
+    sentWeb:"✅ Заказ успешно отправлен! Мы свяжемся с вами для подтверждения.",
+    failed:"Не удалось отправить заказ. Проверьте интернет и попробуйте ещё раз."
+  },
+  vi:{
+    s1:"Đẹp đến mức bạn muốn chụp ảnh trước tiên",
+    s2:"Ngon đến mức bạn muốn quay lại nhiều lần",
+    familyTitle:"GIA ĐÌNH POP ROLL",familyText:"Dịch vụ giao món gia đình tại Nha Trang",
+    promoTitle:"Giảm 50% cho đơn hàng đầu tiên",promoText:"Mừng khai trương Pop Roll · giao hàng tại Nha Trang",
+    deliveryFree:"🎉 Miễn phí giao hàng cho đơn từ 100.000 ₫",deliveryTime:"🚀 Giao hàng từ 15 phút",workingHours:"🕓 16:00–00:00",
+    all:"Tất cả",salmon:"Cá hồi",shrimp:"Tôm",crab:"Cua",chicken:"Gà",maki:"Maki",nigiri:"Nigiri",bubble:"Bubble Tea",
+    cart:"Giỏ hàng",order:"Đơn hàng của bạn",name:"Họ và tên",phone:"Số điện thoại",address:"Địa chỉ giao hàng",payment:"Thanh toán",
+    cash:"Tiền mặt",qr:"Chuyển khoản QR",comment:"Ghi chú",total:"Tổng cộng",send:"Đặt hàng",
+    hint:"Sau khi gửi đơn, chúng tôi sẽ kiểm tra và liên hệ xác nhận",
+    required:"Vui lòng nhập họ tên, số điện thoại và địa chỉ",empty:"Vui lòng thêm sản phẩm vào giỏ hàng",
+    minimum:"Đơn hàng tối thiểu là 100.000 ₫",minimumNote:"Đơn hàng tối thiểu là 100.000 ₫",
+    sending:"Đang gửi…",
+    sentTelegram:"✅ Đơn hàng đã được gửi. Hãy mở Telegram và xác nhận bằng nút “Đồng ý”.",
+    sentWeb:"✅ Đơn hàng đã được gửi thành công! Chúng tôi sẽ liên hệ với bạn để xác nhận.",
+    failed:"Không thể gửi đơn hàng. Vui lòng kiểm tra kết nối mạng và thử lại."
+  }
+};
 
-const productsEl = document.getElementById("products");
-const categoriesEl = document.getElementById("categories");
-const cartBar = document.getElementById("cartBar");
-const cartCount = document.getElementById("cartCount");
-const cartTotal = document.getElementById("cartTotal");
-const cartModal = document.getElementById("cartModal");
-const cartItems = document.getElementById("cartItems");
-const checkoutTotal = document.getElementById("checkoutTotal");
-
+const $ = id => document.getElementById(id);
 const money = n => new Intl.NumberFormat("vi-VN").format(n) + " ₫";
+const urlLang = new URLSearchParams(location.search).get("lang");
+const telegramLang = String(tg?.initDataUnsafe?.user?.language_code || "").toLowerCase();
+let lang = urlLang === "vi" || (!urlLang && telegramLang.startsWith("vi")) ? "vi" : (localStorage.getItem("lang") || "ru");
+let cat = "all";
+const cart = new Map();
+const cats = ["all","salmon","shrimp","crab","chicken","maki","nigiri","bubble"];
+const t = key => tx[lang][key];
 
-function renderCategories() {
-  categoriesEl.innerHTML = categories.map(c =>
-    `<button class="cat ${c === activeCategory ? "active" : ""}" data-cat="${c}">${c}</button>`
-  ).join("");
-  document.querySelectorAll(".cat").forEach(btn => {
-    btn.onclick = () => {
-      activeCategory = btn.dataset.cat;
-      renderCategories();
-      renderProducts();
-    };
+function productQty(value){
+  if(lang === "ru") return value;
+  return String(value).replace("8 шт","8 miếng").replace("6 шт","6 miếng").replace("2 шт","2 miếng").replace("500 мл","500 ml");
+}
+
+function apply(){
+  document.querySelectorAll(".langs button").forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
+  $("s1").textContent=t("s1"); $("s2").textContent=t("s2");
+  $("familyTitle").textContent=t("familyTitle"); $("familyText").textContent=t("familyText");
+  $("promoTitle").textContent=t("promoTitle"); $("promoText").textContent=t("promoText");
+  $("deliveryFree").textContent=t("deliveryFree"); $("deliveryTime").textContent=t("deliveryTime"); $("workingHours").textContent=t("workingHours");
+  $("minimumNote").textContent=t("minimumNote"); $("cartWord").textContent=t("cart"); $("orderTitle").textContent=t("order");
+  $("nameLabel").textContent=t("name"); $("phoneLabel").textContent=t("phone"); $("addressLabel").textContent=t("address");
+  $("paymentLabel").textContent=t("payment"); $("cashOpt").textContent=t("cash"); $("qrOpt").textContent=t("qr");
+  $("commentLabel").textContent=t("comment"); $("totalLabel").textContent=t("total"); $("send").textContent=t("send"); $("hint").textContent=t("hint");
+  renderCats(); renderProducts(); renderCart();
+}
+
+function renderCats(){
+  $("cats").innerHTML = cats.map(c => `<button class="cat ${c===cat?"active":""}" data-c="${c}">${t(c)}</button>`).join("");
+  document.querySelectorAll(".cat").forEach(b => b.onclick = () => { cat=b.dataset.c; renderCats(); renderProducts(); });
+}
+
+function renderProducts(){
+  const list = cat==="all" ? products : products.filter(p => p.cat===cat);
+  $("products").innerHTML = list.map(p => `
+    <article class="card">
+      <span class="badge">-50%</span>${p.tag?`<span class="tag">${p.tag}</span>`:""}
+      <img class="photo" src="${p.img}?v=41" alt="${lang==="ru"?p.ru:p.vi}">
+      <div class="body">
+        <h3>${lang==="ru"?p.ru:p.vi}</h3>
+        <p class="desc">${lang==="ru"?p.dru:p.dvi}</p>
+        <div class="qtyline">${productQty(p.qty)}</div>
+        <div class="bottom">
+          <div><span class="old">${money(p.old)}</span><span class="new">${money(p.price)}</span></div>
+          <button class="add" data-id="${p.id}">+</button>
+        </div>
+      </div>
+    </article>`).join("");
+  document.querySelectorAll(".add").forEach(b => b.onclick = () => {
+    const id=Number(b.dataset.id);
+    cart.set(id,(cart.get(id)||0)+1);
+    update();
+    tg?.HapticFeedback?.impactOccurred("light");
   });
 }
 
-function renderProducts() {
-  const list = activeCategory === "Все" ? products : products.filter(p => p.category === activeCategory);
-  productsEl.innerHTML = list.map(p => `
-    <article class="card">
-      <div class="product-photo">${p.emoji}</div>
-      <div class="card-body">
-        <h3>${p.name}</h3>
-        <p class="desc">${p.desc}</p>
-        <div class="price-row">
-          <span class="price">${money(p.price)}</span>
-          <button class="add" data-id="${p.id}" aria-label="Добавить">+</button>
-        </div>
-      </div>
-    </article>
-  `).join("");
-  document.querySelectorAll(".add").forEach(btn => btn.onclick = () => add(Number(btn.dataset.id)));
+function totals(){
+  let count=0,total=0;
+  for(const [id,q] of cart){
+    const p=products.find(x=>x.id===id);
+    count+=q; total+=p.price*q;
+  }
+  return {count,total};
 }
 
-function add(id) {
-  cart.set(id, (cart.get(id) || 0) + 1);
-  updateCart();
-  tg?.HapticFeedback?.impactOccurred("light");
-}
-
-function changeQty(id, delta) {
-  const next = (cart.get(id) || 0) + delta;
-  if (next <= 0) cart.delete(id); else cart.set(id, next);
-  updateCart();
+function update(){
+  const x=totals();
+  $("cartBtn").hidden=x.count===0;
+  $("cartCount").textContent=x.count;
+  $("cartTotal").textContent=money(x.total);
+  $("finalTotal").textContent=money(x.total);
   renderCart();
 }
 
-function totals() {
-  let count = 0, total = 0;
-  for (const [id, qty] of cart) {
-    const p = products.find(x => x.id === id);
-    count += qty;
-    total += p.price * qty;
-  }
-  return {count, total};
-}
-
-function updateCart() {
-  const {count, total} = totals();
-  cartBar.hidden = count === 0;
-  cartCount.textContent = count;
-  cartTotal.textContent = money(total);
-  checkoutTotal.textContent = money(total);
-}
-
-function renderCart() {
-  if (!cart.size) {
-    cartItems.innerHTML = "<p>Корзина пуста</p>";
-    return;
-  }
-  cartItems.innerHTML = [...cart.entries()].map(([id, qty]) => {
-    const p = products.find(x => x.id === id);
-    return `<div class="cart-item">
-      <div><strong>${p.name}</strong><br><small>${money(p.price * qty)}</small></div>
-      <div class="qty">
-        <button onclick="changeQty(${id},-1)">−</button>
-        <b>${qty}</b>
-        <button onclick="changeQty(${id},1)">+</button>
-      </div>
-    </div>`;
+function renderCart(){
+  $("cartItems").innerHTML=[...cart].map(([id,q])=>{
+    const p=products.find(x=>x.id===id);
+    return `<div class="cartrow"><div><b>${lang==="ru"?p.ru:p.vi}</b><br><small>${money(p.price*q)}</small></div><div class="controls"><button onclick="change(${id},-1)">−</button><b>${q}</b><button onclick="change(${id},1)">+</button></div></div>`;
   }).join("");
 }
 
-cartBar.onclick = () => {
-  renderCart();
-  cartModal.hidden = false;
+window.change=(id,d)=>{
+  const next=(cart.get(id)||0)+d;
+  next<=0?cart.delete(id):cart.set(id,next);
+  update();
 };
-document.getElementById("closeCart").onclick = () => cartModal.hidden = true;
-cartModal.onclick = e => { if (e.target === cartModal) cartModal.hidden = true; };
 
-document.getElementById("sendOrder").onclick = () => {
-  const name = document.getElementById("customerName").value.trim();
-  const phone = document.getElementById("customerPhone").value.trim();
-  const address = document.getElementById("customerAddress").value.trim();
-  const comment = document.getElementById("customerComment").value.trim();
+document.querySelectorAll(".langs button").forEach(b => b.onclick=()=>{
+  lang=b.dataset.lang;
+  localStorage.setItem("lang",lang);
+  apply();
+});
 
-  if (!name || !phone || !address) {
-    alert("Заполните имя, телефон и адрес доставки.");
-    return;
-  }
+$("cartBtn").onclick=()=>{renderCart();$("modal").hidden=false;};
+$("close").onclick=()=>$("modal").hidden=true;
+$("modal").onclick=e=>{if(e.target===$("modal"))$("modal").hidden=true;};
 
-  const {total} = totals();
-  const lines = [...cart.entries()].map(([id, qty]) => {
-    const p = products.find(x => x.id === id);
-    return `${qty} × ${p.name} — ${money(p.price * qty)}`;
+const ORDER_API="https://pop-roll-bot-production.up.railway.app/order";
+const MIN_ORDER=100000;
+
+$("send").onclick=async()=>{
+  const name=$("name").value.trim();
+  const phone=$("phone").value.trim();
+  const address=$("address").value.trim();
+  const comment=$("comment").value.trim();
+  const paymentCode=$("payment").value;
+
+  if(!cart.size){alert(t("empty"));return;}
+  if(!name||!phone||!address){alert(t("required"));return;}
+
+  const x=totals();
+  if(x.total<MIN_ORDER){alert(t("minimum"));return;}
+
+  const items=[...cart].map(([id,q])=>{
+    const p=products.find(item=>item.id===id);
+    return {id:p.id,name:lang==="ru"?p.ru:p.vi,quantity:q,unitPrice:p.price,subtotal:p.price*q};
   });
 
-  const message = [
-    "🍣 Новый заказ Pop Roll",
-    "",
-    ...lines,
-    "",
-    `Итого: ${money(total)}`,
-    `Имя: ${name}`,
-    `Телефон: ${phone}`,
-    `Адрес: ${address}`,
-    comment ? `Комментарий: ${comment}` : ""
-  ].filter(Boolean).join("\n");
+  const button=$("send");
+  button.disabled=true;
+  button.textContent=t("sending");
 
-  if (tg?.sendData) {
-    tg.sendData(JSON.stringify({type:"order", message, total}));
-    tg.close();
-  } else {
-    window.location.href = "https://t.me/PopRollNhaTrangBot?text=" + encodeURIComponent(message);
+  try{
+    const response=await fetch(ORDER_API,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        initData:tg?.initData||"",
+        language:lang,
+        customer:{name,phone,address},
+        payment:{code:paymentCode},
+        comment,
+        items,
+        total:x.total
+      })
+    });
+
+    const result=await response.json().catch(()=>({}));
+    if(!response.ok||!result.ok) throw new Error(result.error||"Order failed");
+
+    alert(t(result.source==="telegram" ? "sentTelegram" : "sentWeb"));
+    cart.clear();
+    update();
+    $("modal").hidden=true;
+  }catch(error){
+    console.error(error);
+    alert(t("failed"));
+  }finally{
+    button.disabled=false;
+    button.textContent=t("send");
   }
 };
 
-renderCategories();
-renderProducts();
-updateCart();
+apply();
+update();
