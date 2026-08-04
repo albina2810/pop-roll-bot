@@ -216,6 +216,37 @@ async function sendCommunityInvite(order, stage = "accepted") {
     }
   });
 }
+async function scheduleReviewRequest(order) {
+  if (!order.chatId) return;
+
+  setTimeout(async () => {
+    try {
+      const vi = orderLanguage(order) === "vi";
+      const text = vi
+        ? `⭐ <b>Bạn thấy đơn hàng #${order.id} thế nào?</b>
+
+Hãy để lại đánh giá trong cộng đồng Pop Roll và nhận <b>Kappa Maki miễn phí</b> trong đơn hàng tiếp theo 💗`
+        : `⭐ <b>Как вам заказ №${order.id}?</b>
+
+Оставьте отзыв в сообществе Pop Roll и получите <b>Kappa Maki в подарок</b> к следующему заказу 💗`;
+
+      await telegram("sendMessage", {
+        chat_id: order.chatId,
+        text,
+        parse_mode: "HTML",
+        reply_markup: {
+          inline_keyboard: [[{
+            text: vi ? "⭐ Viết đánh giá" : "⭐ Оставить отзыв",
+            url: COMMUNITY_URL
+          }]]
+        }
+      });
+    } catch (error) {
+      console.error(`Review request failed for order ${order.id}:`, error);
+    }
+  }, 25 * 60 * 1000);
+}
+
 async function editKeyboard(chatId, messageId, replyMarkup) {
   if (!chatId || !messageId) return;
   await telegram("editMessageReplyMarkup", { chat_id: chatId, message_id: messageId, reply_markup: replyMarkup });
@@ -386,7 +417,8 @@ app.post("/telegram", async (req, res) => {
           await editKeyboard(COURIER_CHAT_ID, callback.message.message_id, { inline_keyboard: [] });
           await notifyClient(order, clientText(order, `❤️ <b>Заказ №${order.id} доставлен</b>\n\nСпасибо, что выбрали Pop Roll!`, `❤️ <b>Đơn hàng #${order.id} đã được giao</b>\n\nCảm ơn bạn đã chọn Pop Roll!`));
           await sendCommunityInvite(order, "delivered");
-          await telegram("sendMessage", { chat_id: ADMIN_ID, text: `✅ Заказ №${order.id} доставлен` });
+          await scheduleReviewRequest(order);
+          await telegram("sendMessage", { chat_id: ADMIN_ID, text: `✅ Заказ №${order.id} доставлен. Через 25 минут клиенту уйдёт просьба об отзыве с подарком Kappa Maki.` });
           setTimeout(() => orders.delete(id), 60 * 60 * 1000);
           return;
         }
